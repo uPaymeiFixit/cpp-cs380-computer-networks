@@ -38,7 +38,7 @@ public final class ChatClient {
         Scanner userInput = new Scanner(System.in);
         System.out.print("Enter your username: ");
         
-        try (Socket s = new Socket("localhost", 38001)) {
+        try (Socket s = new Socket("18.221.102.182", 38001)) {
             socket = s;
 
             // Set up output stream
