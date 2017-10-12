@@ -18,10 +18,14 @@ public final class PhysLayerClient {
     decodeNRZI(bits);
     byte[] bytes = decode5B4B(new String(bits));
     checkBytes(bytes, input_stream, output_stream);
+
+    socket.close();
+    System.out.println("Disconnected from server.");
   }
 
   // Establish baseline by reading 64 values and averaging them
-  public static double calculateBaseline (InputStream input_stream, int preamble_length) throws IOException {
+  public static double calculateBaseline (
+    InputStream input_stream, int preamble_length) throws IOException {
     double baseline = 0.0;
     for (int i = 0; i < preamble_length; i++) {
       baseline += input_stream.read();
@@ -32,7 +36,8 @@ public final class PhysLayerClient {
   }
 
   // Read 32 bytes from server encoded as 5B/4B with NRZI
-  public static char[] readBits (InputStream input_stream, int number_bits, double baseline) throws IOException {
+  public static char[] readBits (
+    InputStream input_stream, int number_bits, double baseline) throws IOException {
     char[] bits = new char[number_bits];
     for (int i = 0; i < number_bits; i++) {
       bits[i] = input_stream.read() > baseline ? '1' : '0';
@@ -85,7 +90,9 @@ public final class PhysLayerClient {
   }
 
   // Confirm with the server that we have decoded the message properly
-  public static void checkBytes (byte[] bytes, InputStream input_stream, OutputStream output_stream) throws IOException {
+  public static void checkBytes (
+    byte[] bytes, InputStream input_stream, 
+    OutputStream output_stream) throws IOException {
     output_stream.write(bytes);
     if (input_stream.read() == 1) {
       System.out.println("Response good.");
