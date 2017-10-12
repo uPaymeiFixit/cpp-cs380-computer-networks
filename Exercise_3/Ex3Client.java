@@ -18,16 +18,13 @@ public final class Ex3Client {
     byte[] bytes = readBytes(input_stream, number_bytes);
     short check = checksum(bytes);
     checkBytes(check, input_stream, output_stream);
-
-    socket.close();
-    System.out.println("Disconnected from server.");
   }
 
   // Read 32 bytes from server encoded as 5B/4B with NRZI
   public static byte[] readBytes (
     InputStream input_stream, int number_bytes) throws IOException {
     
-    System.out.printf("Reading %d bytes.", number_bytes);
+    System.out.printf("Reading %d bytes.\nData received:", number_bytes);
     byte[] bytes = new byte[number_bytes];
     for (int i = 0; i < number_bytes; i++) {
       if (i % 10 == 0) {
