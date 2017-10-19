@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.zip.CRC32;
 
 public final class Ex3Client {
   public static void main (String[] args) throws IOException, UnknownHostException {
@@ -14,7 +13,7 @@ public final class Ex3Client {
     OutputStream output_stream = socket.getOutputStream();
 
     // Get the number of bytes being sent from the server
-    int number_bytes = input_stream.read(); 
+    int number_bytes = input_stream.read();
     byte[] bytes = readBytes(input_stream, number_bytes);
     short check = checksum(bytes);
     checkBytes(check, input_stream, output_stream);
@@ -23,8 +22,8 @@ public final class Ex3Client {
   // Read 32 bytes from server encoded as 5B/4B with NRZI
   public static byte[] readBytes (
     InputStream input_stream, int number_bytes) throws IOException {
-    
-    System.out.printf("Reading %d bytes.\nData received:", number_bytes);
+
+    System.out.printf("Reading %d bytes.\nData received:\n", number_bytes);
     byte[] bytes = new byte[number_bytes];
     for (int i = 0; i < number_bytes; i++) {
       if (i % 10 == 0) {
@@ -36,14 +35,32 @@ public final class Ex3Client {
         System.out.println();
       }
     }
+    System.out.println();
     return bytes;
   }
+
+  // The C code for the algorithm is provided below:
+  // u_short cksum(u_short *buf, int count)
+  // {
+  //   register u_long sum = 0;
+  //   while (count--)
+  //   {
+  //     sum += *buf++;
+  //     if (sum & 0xFFFF0000)
+  //     {
+  //       /* carry occurred. so wrap around */
+  //       sum &= 0xFFFF;
+  //       sum++;
+  //     }
+  //   }
+  //   return ~(sum & 0xFFFF);
+  // }
 
   public static short checksum(byte[] b) {
     int sum = 0;
 
     for (byte i : b) {
-      sum += b[i];
+      sum += i;
       if ((sum & 0xFFFF0000) != 0) {
         /* carry occurred. so wrap around */
         sum &= 0xFFFF;
