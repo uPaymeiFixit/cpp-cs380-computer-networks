@@ -14,22 +14,22 @@ public final class Ex3Client {
 
     // Get the number of bytes being sent from the server
     int number_bytes = input_stream.read();
-    byte[] bytes = readBytes(input_stream, number_bytes);
+    int[] bytes = readBytes(input_stream, number_bytes);
     short check = checksum(bytes);
     checkBytes(check, input_stream, output_stream);
   }
 
   // Read 32 bytes from server encoded as 5B/4B with NRZI
-  public static byte[] readBytes (
+  public static int[] readBytes (
     InputStream input_stream, int number_bytes) throws IOException {
 
     System.out.printf("Reading %d bytes.\nData received:\n", number_bytes);
-    byte[] bytes = new byte[number_bytes];
+    int[] bytes = new int[number_bytes];
     for (int i = 0; i < number_bytes; i++) {
       if (i % 10 == 0) {
         System.out.print("  ");
       }
-      bytes[i] = (byte) input_stream.read();
+      bytes[i] = input_stream.read();
       System.out.printf("%02X", bytes[i]);
       if (i % 10 == 9) {
         System.out.println();
@@ -56,10 +56,10 @@ public final class Ex3Client {
   //   return ~(sum & 0xFFFF);
   // }
 
-  public static short checksum(byte[] b) {
+  public static short checksum(int[] b) {
     int sum = 0;
 
-    for (byte i : b) {
+    for (int i : b) {
       sum += i;
       if ((sum & 0xFFFF0000) != 0) {
         /* carry occurred. so wrap around */
