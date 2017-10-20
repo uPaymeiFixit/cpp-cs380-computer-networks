@@ -59,8 +59,15 @@ public final class Ex3Client {
   public static short checksum(int[] b) {
     int sum = 0;
 
-    for (int i : b) {
-      sum += i;
+    for (int i = 0; i < b.length; i += 2) {
+
+      // Convert to 16 bit
+      if (i + 1 == b.length) {
+        sum += b[i] << 8;
+      } else {
+        sum += (b[i] << 8) | b[i + 1];
+      }
+
       if ((sum & 0xFFFF0000) != 0) {
         /* carry occurred. so wrap around */
         sum &= 0xFFFF;
