@@ -23,17 +23,17 @@ public class FileTransfer {
     try {
       KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
       gen.initialize(4096);
+      System.out.print("Generating ./private.bin... ");      
       KeyPair keyPair = gen.genKeyPair();
       PrivateKey privateKey = keyPair.getPrivate();
-      PublicKey publicKey = keyPair.getPublic();
+        System.out.println("Success!");
       System.out.print("Generating ./public.bin...  ");
+      PublicKey publicKey = keyPair.getPublic();
       try (ObjectOutputStream oos = new ObjectOutputStream(
         new FileOutputStream(new File("public.bin"))
       )) {
         oos.writeObject(publicKey);
-        System.out.println("Success!");
       }
-      System.out.print("Generating ./private.bin... ");      
       try (ObjectOutputStream oos = new ObjectOutputStream(
         new FileOutputStream(new File("private.bin"))
       )) {
